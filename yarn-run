@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
+args=${*:-""}
+
+if [[ ! -z "$args" ]]; then
+  yarn run $args
+  exit 0
+fi
 
 if ! command -v fzf >/dev/null 2>&1; then
   echo "fzf not found"
