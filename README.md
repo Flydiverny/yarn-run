@@ -1,8 +1,18 @@
 # yarn-run
 
-brew install flydiverny/tap/yarn-run
+yarn run supercharged with [fzf](https://github.com/junegunn/fzf)
 
-Usage: `yarn-run`
+[![asciicast](./demo.gif)](https://asciinema.org/a/233992)
+
+```sh
+brew install flydiverny/tap/yarn-run
+```
+
+Usage:
+
+```sh
+yarn-run [script]
+```
 
 ## Install
 
@@ -15,6 +25,4 @@ alias yr=yarn-run
 
 Depends on [fzf](https://github.com/junegunn/fzf)
 
-
-
-[releases]: https://github.com/flydiverny/yarnrun/releases
+[releases]: https://github.com/flydiverny/yarn-run/releases
