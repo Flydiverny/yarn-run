@@ -23,6 +23,6 @@ brew install flydiverny/tap/yarn-run
 alias yr=yarn-run
 ```
 
-Depends on [fzf](https://github.com/junegunn/fzf)
+Depends on [fzf](https://github.com/junegunn/fzf) and [jq](https://github.com/stedolan/jq)
 
 [releases]: https://github.com/flydiverny/yarn-run/releases
