@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
+RUNNER=${YARN_RUN_RUNNER:='yarn'}
 args=${*:-""}
 
 if [[ -n "$args" ]]; then
-  yarn run $args
+  # shellcheck disable=SC2086
+  $RUNNER run $args
   exit $?
 fi
 
@@ -24,23 +26,32 @@ fi
 
 commands=$(jq -r ".scripts | keys[]" <package.json)
 
-if workspaces=$(jq -r '.workspaces[]' <package.json 2>/dev/null); then
-  for ws in $workspaces; do
-    [[ ! -f "$ws/package.json" ]] && continue
-    if ! scripts=$(jq -r ".scripts | keys[] | \"$ws \(.)\"" <"$ws/package.json" 2>/dev/null); then
-      continue
-    fi
-    commands+=$(echo -e "\n$scripts")
-  done
+# Only do workspaces for yarn
+if [ "$RUNNER" == "yarn" ]; then
+  if workspaces=$(jq -r '.workspaces[]' <package.json 2>/dev/null); then
+    for ws in $workspaces; do
+      [[ ! -f "$ws/package.json" ]] && continue
+      if ! scripts=$(jq -r ".scripts | keys[] | \"$ws \(.)\"" <"$ws/package.json" 2>/dev/null); then
+        continue
+      fi
+      commands+=$(echo -e "\n$scripts")
+    done
+  fi
 fi
 
 # shellcheck disable=SC2016
-if ! command=$(echo "$commands" | fzf --preview-window down:2 --preview '
+previewScript='
 set -- $(echo {}); ws=$1; script=$2;
 [[ -z "$script" ]] && { script=$ws; ws="."; } || cwd=" --cwd $ws";
 reset=$(tput sgr0);bold=$(tput bold);yellow=$(tput setaf 3);
 echo -e "${yellow}${bold}yarn${cwd} run $script\n${reset}# $(jq -r ".scripts[\"$script\"]" <"$ws/package.json")"
-'); then
+'
+
+# preview should show correct runner
+previewScript=${previewScript/yarn/$RUNNER}
+
+if ! command=$(echo "$commands" | fzf --preview-window down:2 --preview "$previewScript"); then
+  # user aborted, we exit
   exit $?
 fi
 
@@ -52,6 +63,6 @@ cwd=""
 
 [[ -z "$script" ]] && script=$ws || cwd=" --cwd $ws"
 
-echo "yarn${cwd} run $script"
+echo "${RUNNER}${cwd} run $script"
 # shellcheck disable=SC2086
-yarn ${cwd} run "$script"
+$RUNNER ${cwd} run "$script"

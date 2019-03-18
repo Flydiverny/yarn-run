@@ -1,6 +1,6 @@
-# yarn-run
+# yarn-run & npm-run
 
-yarn run supercharged with [fzf](https://github.com/junegunn/fzf)
+yarn/npm run supercharged with [fzf](https://github.com/junegunn/fzf)
 
 [![asciicast](./demo.gif)](https://asciinema.org/a/233992)
 
@@ -12,6 +12,7 @@ Usage:
 
 ```sh
 yarn-run [script]
+npm-run [script]
 ```
 
 ## Install
@@ -20,7 +21,13 @@ yarn-run [script]
 
 ```sh
 brew install flydiverny/tap/yarn-run
+```
+
+**alias suggestion**:
+
+```sh
 alias yr=yarn-run
+alias nr=npm-run
 ```
 
 Depends on [fzf](https://github.com/junegunn/fzf) and [jq](https://github.com/stedolan/jq)

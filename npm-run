@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+dir=${BASH_SOURCE%/*}
+YARN_RUN_RUNNER=npm "$dir/yarn-run"
